@@ -4,10 +4,10 @@ import json
 from langchain_ollama.chat_models import ChatOllama
 from langchain_core.prompts import ChatPromptTemplate
 
-
+from core.llm import get_default_chat_model
 def consume_search_events():
 
-    llm = ChatOllama(model="phi3:mini")
+    llm = get_default_chat_model()
 
     prompt = ChatPromptTemplate.from_messages(
         [
