@@ -4,13 +4,14 @@ from __api.endpoints import router
 
 app = FastAPI(title="Product Recommendation API")
 
-# Add CORS middleware configuration
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],         # Allows all origins; consider specifying domains for production
+    allow_origins=["*"],
     allow_credentials=True,
-    allow_methods=["*"],         # Allow all HTTP methods (GET, POST, etc)
-    allow_headers=["*"],         
+    allow_methods=["*"],
+    allow_headers=["*"],
 )
 
-app.include_router(router, prefix="/agent", tags=["ProductAgent"])
+app.include_router(router, prefix="/api/v1", tags=["Search"])
+
+

@@ -1,16 +1,33 @@
 from fastapi import APIRouter
 from pydantic import BaseModel
-from langchain_orchestration.agent import run_recommendation_agent
+from typing import Optional, Dict, Any
 
 router = APIRouter()
 
-class RecommendationInput(BaseModel):
-    user_query: str
+class UserContext(BaseModel):
+    user_id: str
 
-@router.post("/recommend")
-async def recommend_products(query: RecommendationInput):
+class SearchRequest(BaseModel):
+    query: str
+    user_context: Optional[UserContext] = None
+
+class SearchResponse(BaseModel):
+    query: str
+    userId: Optional[str]
+    action: str
+    metadata: Dict[str, Any]
+
+@router.post("/search", response_model=SearchResponse)
+async def search_products(payload: SearchRequest):
     """
-    Receives a user query and returns product recommendations.
+    Receives search requests from B2C app.
     """
-    result = run_recommendation_agent(query.user_query)
-    return {"recommendations": result}
+
+    return {
+        "query": payload.query,
+        "userId": payload.user_context.user_id if payload.user_context else None,
+        "action": "list_products",
+        "metadata": {
+            "source": "pap-agentic",
+        },
+    }
